@@ -28,6 +28,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# Allow all hosts during development
+CORS_ORIGIN_ALLOW_ALL = True
+
+CSRF_COOKIE_SECURE = False
 
 # Application definition
 
