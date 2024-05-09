@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 import djongo
 from pathlib import Path
+from datetime import timedelta
+from django.core.management.utils import get_random_secret_key
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -51,6 +53,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'djongo',
     'Attendance',
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'django_otp',
+    'django_otp.plugins.otp_totp',
+    'django_otp.plugins.otp_static',
 ]
 
 MIDDLEWARE = [
@@ -142,6 +149,20 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'edeameron@gmail.com'
+EMAIL_HOST_PASSWORD = 'slyp cgjg xjps omfq'
+
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),  # Access token lifetime: 60 minutes
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),     # Refresh token lifetime: 1 day
+    'ALGORITHM': 'HS256',                            # Cryptographic algorithm
+}
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

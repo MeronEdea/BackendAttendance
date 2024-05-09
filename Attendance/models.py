@@ -82,10 +82,13 @@ class Student(models.Model):
 
 # Course Model
 class Course(models.Model):
-    course_name = models.CharField(max_length=100)
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, default=None)
-    schedule = models.ForeignKey('Schedule', related_name='courses', on_delete=models.CASCADE, default=None)
-    sections = models.ManyToManyField(Section)
+    college = models.CharField(max_length=100, default=None)
+    department = models.CharField(max_length=100, default=None)
+    name = models.CharField(max_length=100, default=None)
+    code = models.CharField(max_length=10, default=None)
+    duration = models.CharField(max_length=50, default=None)
+    year = models.CharField(max_length=10, default=None)
+    prerequest = models.CharField(max_length=100, default=None)
 
     def __str__(self):
         return self.course_name
@@ -151,3 +154,11 @@ class AttendanceRecord(models.Model):
 
     def str(self):
         return f"{self.date} - {self.check_in}"
+    
+#Permission request model
+class PermissionRequest(models.Model):
+    teacher = models.CharField(max_length=100)
+    reason = models.TextField()
+    evidence = models.FileField(upload_to='evidence/')
+    sick_leave = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
