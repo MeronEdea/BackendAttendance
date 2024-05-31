@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.core.validators import RegexValidator
+from django.conf import settings
+from django.utils import timezone
 
 # Custom user manager for the custom user model
 class CustomUserManager(BaseUserManager):
@@ -67,7 +69,7 @@ class Section(models.Model):
 
 # FaceData Model
 class FaceData(models.Model):
-    face_encoding = models.FileField(upload_to='facedata')
+    face_encoding = models.FileField()
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
 # Student Model
@@ -78,7 +80,7 @@ class Student(models.Model):
     year_semester = models.CharField(max_length=50, default=None)
 
     def __str__(self):
-        return self.name
+        return f"Student ID: {self.student_id}"
 
 # Course Model
 class Course(models.Model):
@@ -89,6 +91,9 @@ class Course(models.Model):
     duration = models.CharField(max_length=50, default=None)
     year = models.CharField(max_length=10, default=None)
     prerequest = models.CharField(max_length=100, default=None)
+    joinCode = models.CharField(max_length=10, default=None)
+    section = models.ManyToManyField(Section, related_name='courses')
+    approved_teacher = models.ForeignKey(Teacher, null=True, blank=True, on_delete=models.SET_NULL, related_name='approved_courses')
 
     def __str__(self):
         return self.course_name
@@ -98,9 +103,11 @@ class Schedule(models.Model):
     day_of_the_week = models.CharField(max_length=50)
     start_time = models.TimeField()
     end_time = models.TimeField()
+    location = models.CharField(max_length=100, default=None)  # Add location field
+    instructor = models.CharField(max_length=100, default=None)  # Add instructor field
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='schedules')
 
-    def __str__(self):
+    def str(self):
         return f"{self.day_of_the_week} ({self.start_time} - {self.end_time}) - Course: {self.course}"
 
 # Notification Model
@@ -122,14 +129,6 @@ class Attendance(models.Model):
 class CourseStudent(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-
-# Permission Model
-class Permission(models.Model):
-    user_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    teacher_id = models.ForeignKey(Teacher, on_delete=models.CASCADE)
-    reason = models.CharField(max_length=255)
-    evidence = models.FileField(upload_to='permissions')
-
 
 # Activity log Model
 class ActivityLog(models.Model):
@@ -157,8 +156,53 @@ class AttendanceRecord(models.Model):
     
 #Permission request model
 class PermissionRequest(models.Model):
+    STATUS_CHOICES = (
+        ('pending', 'Pending'),
+        ('approved', 'Approved'),
+        ('rejected', 'Rejected'),
+    )
     teacher = models.CharField(max_length=100)
     reason = models.TextField()
     evidence = models.FileField(upload_to='evidence/')
     sick_leave = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    student_id = models.IntegerField(default=None)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    submitted_date = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f"PermissionRequest #{self.pk} for Student ID {self.student_id}"
+    
+# teacher course
+class TeacherCourseChoice(models.Model):
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    status = models.CharField(max_length=20, choices=[('pending', 'Pending'), ('approved', 'Approved'), ('rejected', 'Rejected')], default='pending')
+    chosen_date = models.DateTimeField(auto_now_add=True)
+
+# Role Model
+class Role(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return self.name
+
+# Permission Model
+class Permission(models.Model):
+    codename = models.CharField(max_length=100, unique=True, default=None)
+    name = models.CharField(max_length=100, default=None)
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.name
+
+# Role-Permission Relationship Model
+class RolePermission(models.Model):
+    role = models.ForeignKey(Role, on_delete=models.CASCADE, related_name='permissions')
+    permission = models.ForeignKey(Permission, on_delete=models.CASCADE, related_name='roles')
+
+    class Meta:
+        unique_together = ('role', 'permission')
+
+    def __str__(self):
+        return f"{self.role.name} - {self.permission.codename}"
