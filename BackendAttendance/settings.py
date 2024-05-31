@@ -14,6 +14,9 @@ import djongo
 from pathlib import Path
 from datetime import timedelta
 from django.core.management.utils import get_random_secret_key
+import os
+from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -58,9 +61,12 @@ INSTALLED_APPS = [
     'django_otp',
     'django_otp.plugins.otp_totp',
     'django_otp.plugins.otp_static',
+    'corsheaders',
+
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -68,6 +74,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'BackendAttendance.urls'
@@ -97,13 +104,17 @@ WSGI_APPLICATION = 'BackendAttendance.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        'NAME': 'AASTUattendance',
+        'NAME': 'Attendance_V2',
         'CLIENT': {
-            'host': 'mongodb+srv://tsedey:EjOiKLdQngoIwhdB@attendance.upm826h.mongodb.net/AASTUattendance',
+            'host': 'mongodb+srv://tsedey:EjOiKLdQngoIwhdB@attendance.upm826h.mongodb.net/Attendance_V2',
             'username': 'tsedey',
             'password': 'EjOiKLdQngoIwhdB',
             'authSource': 'admin',
-            'authMechanism': 'SCRAM-SHA-1',
+            # 'authMechanism': 'SCRAM-SHA-1',
+            # 'ssl': True,  # Include this if your MongoDB requires SSL
+            # 'serverSelectionTimeoutMS': 30000,  # 30 seconds timeout
+            # 'connectTimeoutMS': 30000,  # 30 seconds timeout
+
         }
     }
 }
@@ -169,3 +180,12 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # Adjust this to your frontend URL
+]
+
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
