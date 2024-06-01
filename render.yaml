@@ -1,0 +1,30 @@
+databases:
+  - name: mysitedb
+    plan: free
+    databaseName: Attendance_V2
+    user: tsedey
+
+services:
+  - type: web
+    plan: free
+    name: backendattendance
+    runtime: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn BackendAttendance.wsgi:application --bind 0.0.0.0:$PORT"
+    envVars:
+      - key: DB_NAME
+        fromDatabase:
+          name: mysitedb
+          property: databaseName
+      - key: DB_HOST
+        fromDatabase:
+          name: mysitedb
+          property: host
+      - key: DB_USERNAME
+        fromDatabase:
+          name: mysitedb
+          property: username
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: mysitedb
+          property: password
