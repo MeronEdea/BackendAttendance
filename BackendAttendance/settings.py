@@ -31,7 +31,7 @@ SECRET_KEY = 'django-insecure-mqdda)7#)9nm(&+*9ko95-kp0o5pg$8mhor-%v63*d5_2rn&ps
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['https://backendattendance-t5c6.onrender.com']
 
 AUTHENTICATION_BACKENDS = [
     'Attendance.backends.CustomAuthBackend',  # Correct import path
