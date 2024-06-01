@@ -104,11 +104,11 @@ WSGI_APPLICATION = 'BackendAttendance.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        'NAME': 'Attendance_V2',
+        'NAME': os.getenv('Attendance_V2'),
         'CLIENT': {
-            'host': 'mongodb+srv://tsedey:EjOiKLdQngoIwhdB@attendance.upm826h.mongodb.net/Attendance_V2',
-            'username': 'tsedey',
-            'password': 'EjOiKLdQngoIwhdB',
+            'host': os.getenv('mongodb+srv://tsedey:EjOiKLdQngoIwhdB@attendance.upm826h.mongodb.net/Attendance_V2'),
+            'username': os.getenv('tsedey'),
+            'password': os.getenv('EjOiKLdQngoIwhdB'),
             'authSource': 'admin',
             # 'authMechanism': 'SCRAM-SHA-1',
             # 'ssl': True,  # Include this if your MongoDB requires SSL
