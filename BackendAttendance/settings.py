@@ -31,7 +31,7 @@ SECRET_KEY = 'django-insecure-mqdda)7#)9nm(&+*9ko95-kp0o5pg$8mhor-%v63*d5_2rn&ps
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://backendattendance-t5c6.onrender.com']
+ALLOWED_HOSTS = ['backendattendance-t5c6.onrender.com']
 
 AUTHENTICATION_BACKENDS = [
     'Attendance.backends.CustomAuthBackend',  # Correct import path
@@ -104,11 +104,11 @@ WSGI_APPLICATION = 'BackendAttendance.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        'NAME': 'Attendance_V2',
+        'NAME': os.getenv('DB_NAME', 'Attendance_V2'),
         'CLIENT': {
-            'host': 'mongodb+srv://tsedey:EjOiKLdQngoIwhdB@attendance.upm826h.mongodb.net/Attendance_V2',
-            'username': 'tsedey',
-            'password': 'EjOiKLdQngoIwhdB',
+            'host': os.getenv('DB_HOST', 'mongodb+srv://tsedey:EjOiKLdQngoIwhdB@attendance.upm826h.mongodb.net/Attendance_V2'),
+            'username': os.getenv('DB_USERNAME', 'tsedey'),
+            'password': os.getenv('DB_PASSWORD', 'EjOiKLdQngoIwhdB'),
             'authSource': 'admin',
             # 'authMechanism': 'SCRAM-SHA-1',
             # 'ssl': True,  # Include this if your MongoDB requires SSL
