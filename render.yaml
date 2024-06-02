@@ -1,8 +1,7 @@
 databases:
   - name: mysitedb
     plan: free
-    databaseName: Attendance_V2
-    user: tsedey
+    connectionString: "mongodb://tsedey:EjOiKLdQngoIwhdB@attendance.upm826h.mongodb.net/Attendance_V2"
 
 services:
   - type: web
@@ -13,18 +12,12 @@ services:
     startCommand: "gunicorn BackendAttendance.wsgi:application --bind 0.0.0.0:$PORT"
     envVars:
       - key: DB_NAME
-        fromDatabase:
-          name: mysitedb
-          property: databaseName
+        value: "Attendance_V2"
       - key: DB_HOST
-        fromDatabase:
-          name: mysitedb
-          property: host
+        value: "attendance.upm826h.mongodb.net"
+      - key: DB_PORT
+        value: "27017" # MongoDB default port
       - key: DB_USERNAME
-        fromDatabase:
-          name: mysitedb
-          property: username
+        value: "tsedey"
       - key: DB_PASSWORD
-        fromDatabase:
-          name: mysitedb
-          property: password
+        value: "EjOiKLdQngoIwhdB"
