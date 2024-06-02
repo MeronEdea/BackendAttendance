@@ -1,7 +1,7 @@
 databases:
   - name: mysitedb
     plan: free
-    connectionString: "mongodb://tsedey:EjOiKLdQngoIwhdB@attendance.upm826h.mongodb.net/Attendance_V2"
+    connectionString: "mongodb://tsedey:EjOiKLdQngoIwhdB@attendance.upm826h.mongodb.net/Attendance_V2?retryWrites=true&w=majority"
 
 services:
   - type: web
@@ -13,11 +13,5 @@ services:
     envVars:
       - key: DB_NAME
         value: "Attendance_V2"
-      - key: DB_HOST
-        value: "attendance.upm826h.mongodb.net"
-      - key: DB_PORT
-        value: "27017" # MongoDB default port
-      - key: DB_USERNAME
-        value: "tsedey"
-      - key: DB_PASSWORD
-        value: "EjOiKLdQngoIwhdB"
+      - key: DB_CONNECTION_STRING
+        value: "mongodb://tsedey:EjOiKLdQngoIwhdB@attendance.upm826h.mongodb.net/Attendance_V2?retryWrites=true&w=majority"
