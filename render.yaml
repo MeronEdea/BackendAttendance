@@ -3,9 +3,13 @@ databases:
     plan: free
     databaseName: Attendance_V2
     user: tsedey
-    password: EjOiKLdQngoIwhdB
-    host: attendance.upm826h.mongodb.net
-    port: 27017
+    properties:
+      - key: password
+        value: EjOiKLdQngoIwhdB
+      - key: host
+        value: attendance.upm826h.mongodb.net
+      - key: port
+        value: 27017
 
 services:
   - type: web
