@@ -107,6 +107,7 @@ DATABASES = {
         'NAME': os.getenv('DB_NAME', 'Attendance_V2'),
         'CLIENT': {
             'host': os.getenv('DB_HOST', 'mongodb+srv://tsedey:EjOiKLdQngoIwhdB@attendance.upm826h.mongodb.net/Attendance_V2'),
+            'port': 27017,
             'username': os.getenv('DB_USERNAME', 'tsedey'),
             'password': os.getenv('DB_PASSWORD', 'EjOiKLdQngoIwhdB'),
             'authSource': 'admin',
