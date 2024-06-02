@@ -1,7 +1,7 @@
 databases:
   - name: mysitedb
     plan: free
-    databaseName: Attendance
+    databaseName: attendance
     user: tsedey
 
 services:
@@ -13,7 +13,7 @@ services:
     startCommand: "gunicorn BackendAttendance.wsgi:application --bind 0.0.0.0:$PORT"
     envVars:
       - key: DB_NAME
-        value: "Attendance"
+        value: "attendance"
       - key: DB_HOST
         value: "attendance.upm826h.mongodb.net"
       - key: DB_PORT
