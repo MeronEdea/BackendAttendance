@@ -26,12 +26,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-mqdda)7#)9nm(&+*9ko95-kp0o5pg$8mhor-%v63*d5_2rn&ps'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-mqdda)7#)9nm(&+*9ko95-kp0o5pg$8mhor-%v63*d5_2rn&ps')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ['backendattendance-t5c6.onrender.com']
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'backendattendance-t5c6.onrender.com').split(',')
 
 AUTHENTICATION_BACKENDS = [
     'Attendance.backends.CustomAuthBackend',  # Correct import path
@@ -110,10 +110,10 @@ DATABASES = {
             'username': os.getenv('DB_USERNAME', 'tsedey'),
             'password': os.getenv('DB_PASSWORD', 'EjOiKLdQngoIwhdB'),
             'authSource': 'admin',
-            # 'authMechanism': 'SCRAM-SHA-1',
-            # 'ssl': True,  # Include this if your MongoDB requires SSL
-            # 'serverSelectionTimeoutMS': 30000,  # 30 seconds timeout
-            # 'connectTimeoutMS': 30000,  # 30 seconds timeout
+            'authMechanism': os.getenv('DB_AUTH_MECHANISM', 'SCRAM-SHA-1'),
+            'ssl': True,  # Include this if your MongoDB requires SSL
+            'serverSelectionTimeoutMS': 30000,  # 30 seconds timeout
+            'connectTimeoutMS': 30000,  # 30 seconds timeout
 
         }
     }
